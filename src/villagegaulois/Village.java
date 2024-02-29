@@ -56,4 +56,82 @@ public class Village {
 		}
 		return chaine.toString();
 	}
+	
+	public static class Marche {
+		private Etal[] etals;
+		
+		public void initiateEtal(int nbEtal) {
+			this.etals= new Etal[nbEtal];
+		}
+	    public Marche(int nombreEtals) {
+	        etals = new Etal[nombreEtals];
+	        for (int i = 0; i < nombreEtals; i++) {
+	            etals[i] = new Etal();
+	        }
+	    }
+		
+	    public void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+	        if (indiceEtal >= 0 && indiceEtal < etals.length) {
+	            etals[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
+	        } else {
+	            System.out.println("L'indice de l'étal est invalide.");
+	        }
+	    }
+	    
+	    public int trouverEtalLibre() {
+	        for (int i = 0; i < etals.length; i++) {
+	            if (!etals[i].isEtalOccupe()) {
+	                return i; // Retourne l'indice de l'étal libre
+	            }
+	        }
+	        return -1; // Aucun étal libre trouvé
+	    }
+	    
+	    public Etal[] trouverEtals(String produit) {
+	    	int count =0;
+	    	for(Etal etal : etals) {
+	    		if(etal.contientProduit(produit)) {
+	    			count ++;
+	    		}
+	    	}
+	    	Etal[] etalsVendantProduit = new Etal[count];
+	    	count=0;
+	    	for(Etal etal : etals) {
+	    		if(etal.contientProduit(produit)) {
+	    			etalsVendantProduit[count++]= etal;
+	    		}
+	    	}
+	    	return etalsVendantProduit;
+
+	    }
+	    
+	    public Etal trouverVendeur(Gaulois gaulois) {
+	        for (Etal etal : etals) {
+	            if (etal.isEtalOccupe() && etal.getVendeur().equals(gaulois)) {
+	                return etal;
+	            }
+	        }
+	        return null;
+	    }
+	    
+	    public String afficherMarche() {
+	        StringBuilder result = new StringBuilder();
+	        int nbEtalVide = 0;
+
+	        for (Etal etal : etals) {
+	            if (etal.isEtalOccupe()) {
+	                result.append(etal.afficherEtal()); // Ajouter l'affichage de l'étal occupé
+	            } else {
+	                nbEtalVide++; // Compter les étals vides
+	            }
+	        }
+	        
+	        if (nbEtalVide > 0) {
+	            result.append("Il reste ").append(nbEtalVide).append(" étals non utilisés dans le marché.\n");
+	        }
+
+	        return result.toString();
+	    }
+	}
+	
 }
